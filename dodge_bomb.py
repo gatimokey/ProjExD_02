@@ -4,13 +4,30 @@ import pygame as pg
 
 
 WIDTH, HEIGHT = 1100, 600
-
+kakudo = 0
 key = {
     pg.K_UP:(0,+5),
     pg.K_DOWN:(0,-5),
     pg.K_LEFT:(-5,0),
     pg.K_RIGHT:(+5,0),
 }
+def kk_key_k():
+    kk_img = pg.image.load("ex02/fig/3.png")
+    kk_img_s = pg.transform.flip(kk_img,True,False)
+    kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    return {
+            (0,0):pg.transform.flip(kk_img,True,False),
+            (0,-5):pg.transform.rotozoom(kk_img,270,1.0),
+            (-5,-5):pg.transform.rotozoom(kk_img,315,1.0),
+            (-5,0):pg.transform.rotozoom(kk_img,0,1.0),
+            (-5,+5):pg.transform.rotozoom(kk_img,45,1.0),
+            (0,+5):pg.transform.rotozoom(kk_img,90,1.0),
+            (+5,+5):pg.transform.rotozoom(kk_img_s,315,2.0),
+            (+5,0):pg.transform.flip(kk_img,True,False),
+            (+5,-5):pg.transform.rotozoom(kk_img_s,45,2.0)
+            }
+        
+       
 def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
     """
     オブジェクトが画面内or画面外を判定し、真理値タプルを返す関数
@@ -24,12 +41,15 @@ def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
         tate = False
     return yoko,tate
 
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kk_key_lst = kk_key_k()
+    kk_img = kk_key_lst[(0,0)]
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900,400
     bom = pg.Surface((20,20))
@@ -59,11 +79,15 @@ def main():
                 sum_mv[0] += tpi[0]
                 sum_mv[1] -= tpi[1]
 
+        
 
         screen.blit(bg_img, [0, 0])
         kk_rct.move_ip(sum_mv[0],sum_mv[1])
         if check_bound(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
+
+        kk_img = kk_key_lst[tuple(sum_mv)]
+        
         screen.blit(kk_img, kk_rct)
         bom_rct.move_ip(vx,vy)
         yoko, tate = check_bound(bom_rct)
