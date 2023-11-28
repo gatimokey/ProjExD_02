@@ -11,6 +11,7 @@ key = {
     pg.K_LEFT:(-5,0),
     pg.K_RIGHT:(+5,0),
 }
+
 def kk_key_k():
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img_s = pg.transform.flip(kk_img,True,False)
