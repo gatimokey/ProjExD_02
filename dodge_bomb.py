@@ -25,7 +25,7 @@ def kk_key_k():
             (+5,+5):pg.transform.rotozoom(kk_img_s,315,2.0),
             (+5,0):pg.transform.flip(kk_img,True,False),
             (+5,-5):pg.transform.rotozoom(kk_img_s,45,2.0)
-            }
+            } #こうかとんの画像の角度の向きがそれぞれ違う画像の辞書
         
        
 def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
@@ -69,8 +69,13 @@ def main():
                 return
 
         if kk_rct.colliderect(bom_rct):
+            bg_img_si = pg.image.load("ex02/fig/pg.11.png")
+            bg_img_sis = pg.transform.rotozoom(bg_img_si,0,3.0)
+            screen.blit(bg_img_sis, [0, 0])
+            pg.display.update()
+            clock.tick(0.5)
             print("Game Over")
-            return
+            return #あたったときに、画面を切り替える
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0,0]
@@ -86,7 +91,7 @@ def main():
         if check_bound(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
 
-        kk_img = kk_key_lst[tuple(sum_mv)]
+        kk_img = kk_key_lst[tuple(sum_mv)]#型を合わせた
         
         screen.blit(kk_img, kk_rct)
         bom_rct.move_ip(vx,vy)
@@ -97,7 +102,7 @@ def main():
             vy *= -1
         bom_rct.move_ip(vx,vy)
         screen.blit(bom,bom_rct)
-        pg.display.update()
+        pg.display.update() #画像のアップデート
         tmr += 1
         clock.tick(50)
 
